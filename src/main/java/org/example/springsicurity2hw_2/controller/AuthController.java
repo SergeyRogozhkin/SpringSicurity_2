@@ -1,6 +1,6 @@
 package org.example.springsicurity2hw_2.controller;
 
-import org.example.springsicurity2hw_2.dto.RequestResponse;
+import org.example.springsicurity2hw_2.dto.*;
 import org.example.springsicurity2hw_2.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +17,17 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<RequestResponse> signUp(@RequestBody RequestResponse signUpRequest) {
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
         return ResponseEntity.ok(authService.signUp(signUpRequest));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<RequestResponse> signIn(@RequestBody RequestResponse signInRequest) {
-        return ResponseEntity.ok(authService.signUp(signInRequest));
+    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest signInRequest) {
+        return ResponseEntity.ok(authService.signIn(signInRequest));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<RequestResponse> refreshToken(@RequestBody RequestResponse refreshTokenRequest) {
+    public ResponseEntity<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
     }
 

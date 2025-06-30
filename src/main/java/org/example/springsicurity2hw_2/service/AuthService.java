@@ -1,6 +1,7 @@
 package org.example.springsicurity2hw_2.service;
 
-import org.example.springsicurity2hw_2.dto.RequestResponse;
+
+import org.example.springsicurity2hw_2.dto.*;
 import org.example.springsicurity2hw_2.entity.OurUsers;
 import org.example.springsicurity2hw_2.repository.OurUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,13 @@ public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public RequestResponse signUp(RequestResponse registrationRequests) {
-        RequestResponse response = new RequestResponse();
+    public SignUpResponse signUp(SignUpRequest request) {
+        SignUpResponse response = new SignUpResponse();
         try {
             OurUsers ourUser = new OurUsers();
-            ourUser.setEmail(registrationRequests.getEmail());
-            ourUser.setPassword(passwordEncoder.encode(registrationRequests.getPassword()));
-            ourUser.setRole(registrationRequests.getRole());
+            ourUser.setEmail(request.getEmail());
+            ourUser.setPassword(passwordEncoder.encode(request.getPassword()));
+            ourUser.setRole(request.getRole());
             OurUsers ourUsersResult = ourUserRepository.save(ourUser);
             if (ourUsersResult != null && ourUsersResult.getId() > 0) {
                 response.setOurUsers(ourUsersResult);
@@ -47,12 +48,12 @@ public class AuthService {
         return response;
     }
 
-    public RequestResponse singIn(RequestResponse registrationRequests) {
-        RequestResponse response = new RequestResponse();
+    public SignInResponse signIn(SignInRequest request) {
+        SignInResponse response = new SignInResponse();
 
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(registrationRequests.getEmail(), registrationRequests.getPassword()));
-            var user = ourUserRepository.findByEmail(registrationRequests.getEmail()).orElseThrow();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            var user = ourUserRepository.findByEmail(request.getEmail()).orElseThrow();
             System.out.println("User is " + user);
             var jwt = jwtUtils.generateToken(user);
             var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
@@ -68,8 +69,8 @@ public class AuthService {
         return response;
     }
 
-    public RequestResponse refreshToken(RequestResponse refreshRequests) {
-        RequestResponse response = new RequestResponse();
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshRequests) {
+        RefreshTokenResponse response = new RefreshTokenResponse();
         String ourEmail = jwtUtils.extractUsername(refreshRequests.getToken());
         OurUsers users = ourUserRepository.findByEmail(ourEmail).orElseThrow();
         if (jwtUtils.isTokenValid(refreshRequests.getToken(), users)) {

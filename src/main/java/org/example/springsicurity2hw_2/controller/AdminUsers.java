@@ -1,6 +1,6 @@
 package org.example.springsicurity2hw_2.controller;
 
-import org.example.springsicurity2hw_2.dto.RequestResponse;
+import org.example.springsicurity2hw_2.dto.SignUpRequest;
 import org.example.springsicurity2hw_2.entity.Product;
 import org.example.springsicurity2hw_2.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ public class AdminUsers {
     }
 
     @PostMapping("/admin/saveproduct")
-    public ResponseEntity<Object> signUp(@RequestBody RequestResponse product) {
-       Product productToSave = new Product();
-       productToSave.setName(product.getName());
+    public ResponseEntity<Object> signUp(@RequestBody SignUpRequest product) {
+        Product productToSave = new Product();
+        productToSave.setName(product.getName());
         return ResponseEntity.ok(productRepository.save(productToSave));
     }
 
